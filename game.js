@@ -450,4 +450,48 @@ function desenhar() {
 
 function gameLoop() { atualizar(); desenhar(); requestAnimationFrame(gameLoop); }
 
-gameLoop();
+// ==========================================
+// 7. PRÉ-CARREGAMENTO (evita o "Lucca azul" enquanto as imagens baixam)
+// ==========================================
+function desenharCarregando(frac) {
+    ctx.fillStyle = "#333"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#FFFFFF"; ctx.textAlign = "center";
+    ctx.font = "28px Arial";
+    ctx.fillText("Carregando... " + Math.round(frac * 100) + "%", canvas.width / 2, canvas.height / 2 - 10);
+    // barrinha de progresso
+    const bw = 300, bx = (canvas.width - bw) / 2, by = canvas.height / 2 + 20;
+    ctx.strokeStyle = "#FFFFFF"; ctx.strokeRect(bx, by, bw, 16);
+    ctx.fillRect(bx, by, bw * frac, 16);
+    ctx.textAlign = "left";
+}
+
+function iniciarQuandoCarregar() {
+    const imagens = [
+        spritesheetPrincipal, spritesheetProfessor2, spritesheetProfessor3,
+        imgOnibus, imgMoeda, imgCarteira, imgNpc, imgPorta, imgPapel,
+        ...Object.values(imgsCarro), ...Object.values(fundos)
+    ];
+    let prontas = 0;
+    const total = imagens.length;
+    let comecou = false;
+
+    function marcar() {
+        prontas++;
+        desenharCarregando(prontas / total);
+        if (!comecou && prontas >= total) { comecou = true; gameLoop(); }
+    }
+
+    desenharCarregando(0);
+    for (const img of imagens) {
+        if (img.complete && img.naturalWidth !== 0) { marcar(); }
+        else {
+            img.addEventListener("load", marcar);
+            img.addEventListener("error", marcar); // se uma falhar, não trava — usa o fallback
+        }
+    }
+
+    // Rede do prédio meio lenta? Começa mesmo assim depois de 8s (com fallback pro que faltar)
+    setTimeout(function () { if (!comecou) { comecou = true; gameLoop(); } }, 8000);
+}
+
+iniciarQuandoCarregar();
