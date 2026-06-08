@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corrida para o Ônibus - Canvas Puro</title>
+    <style>
+        /* Centraliza o canvas na tela e deixa o fundo escuro */
+        body { 
+            margin: 0; 
+            background-color: #111; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+        }
+        canvas { 
+            background-color: #333; /* Cor de fundo do nosso jogo */
+            border: 2px solid #555; 
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <!-- Não precisamos mais do type="module" por enquanto -->
+    <script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+# Banco do grafo de revisão de código (local, não versionar)
+.code-review-graph/
+
+# Config local do Claude Code
+.claude/settings.local.json
+
+# Backups dos sprites antigos (mantidos só localmente)
+assets/*_old_backup.png
+
+# Servidor local / temporários
+*.log
